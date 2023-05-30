@@ -1,32 +1,52 @@
-import React, {useState}from 'react'
+import React from 'react'
+import { useState } from 'react';
 
-function Item({video}) {
-    const [likes, setLikes]=useState(video.upvotes)
-    const [disLikes, setDisLikes]=useState(video.downvotes)
+function Item({ video, comments }) {
+    const [upvotes, setUpvotes] = useState(video.upvotes);
+    const [downvotes, setDownvotes] = useState(video.downvotes);
+    const [showComments, setShowComments] = useState(true);
   
-    function handleUpvotes(){
-      setLikes(prevlikes => prevlikes+1)
-    }
-    function handleDownvotes(){
-      setDisLikes(prevDisLikes => prevDisLikes+1)
-    }
+    function handleUpvote() {
+  setUpvotes(prevLikes=>prevLikes + 1);
+}
+
+function handleDownvote() {
+  setDownvotes(prevDislikes=>prevDislikes + 1);
+}
+
+function toggleComments() {
+  setShowComments(!showComments);
+}
+
   return (
     <div>
          <iframe
         width="919"
         height="525"
-        src={video.embedUrl}
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
         frameBorder="0"
         allowFullScreen
         title="Thinking in React"
       />
-      <h2>{video.title}</h2>
-      <p>{video.views} views | uploaded {video.createdAt}</p>
-      <button onClick={handleUpvotes}>{likes} 👍 </button> 
-      <button onClick={handleDownvotes}> {disLikes} 👎 </button>
+       <h2>{video.title}</h2>
+      <p>{video.views} views | Uploaded {video.createdAt}</p>
+      <button onClick={handleUpvote}>{upvotes}👍</button>
+      <button onClick={handleDownvote}>{downvotes}👎</button>
 
-  </div>
-  )
+      <div>
+      <button onClick={toggleComments}>
+        {showComments ? 'Hide Comments' : 'Show Comments'}
+      </button>
+      </div>
+
+      {showComments &&
+        video.comments.map((comment) => (
+          <div key={comment.id}>
+            <h3>{comment.user}</h3>
+            <p>{comment.comment}</p>
+          </div>
+        ))}
+    </div>
+  );
 }
-
 export default Item;
